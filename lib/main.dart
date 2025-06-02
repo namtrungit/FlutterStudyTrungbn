@@ -13,26 +13,61 @@ class MyApp extends StatelessWidget {
       title: appTitle,
       home: Scaffold(
         appBar: AppBar(title: const Text(appTitle)),
-        body: const SingleChildScrollView(
-          child: Column(
-            children: [
-              ImageSection(image: 'images/lake.jpg'),
-              TitleSection(name: 'TrungBN', location: 'Quan 4'),
-              ButtonSection(),
-              TextSection(
-                description:
-                    'TrungBN HAHAHA TrungBN HAHAHA TrungBN HAHAHA TrungBN HAHAHA'
-                    'TrungBN HAHAHA TrungBN HAHAHA TrungBN HAHAHA TrungBN HAHAHA'
-                    'TrungBN HAHAHA TrungBN HAHAHA TrungBN HAHAHA TrungBN HAHAHA'
-                    'TrungBN HAHAHA TrungBN HAHAHA TrungBN HAHAHA TrungBN HAHAHA',
-              ),
-            ],
-          ),
+        body: ListView.builder(
+          itemCount: items.length,
+          itemBuilder: (context, index) {
+            final item = items[index];
+            return ListTile(
+              title: item.buildTitle(context),
+              subtitle: item.buildSubtitle(context),
+            );
+          },
         ),
       ),
     );
   }
 }
+
+abstract class ListItem {
+  Widget buildTitle(BuildContext context);
+  Widget buildSubtitle(BuildContext context);
+}
+
+class HeadingItem implements ListItem {
+  final String heading;
+  HeadingItem(this.heading);
+  @override
+  Widget buildTitle(BuildContext context) {
+    return Text(heading, style: Theme.of(context).textTheme.titleLarge);
+  }
+
+  @override
+  Widget buildSubtitle(BuildContext context) {
+    return const SizedBox.shrink();
+  }
+}
+
+class MessageItem implements ListItem {
+  final String sender;
+  final String body;
+  MessageItem(this.sender, this.body);
+  @override
+  Widget buildTitle(BuildContext context) {
+    return Text(sender);
+  }
+
+  @override
+  Widget buildSubtitle(BuildContext context) {
+    return Text(body);
+  }
+}
+
+final items = List<ListItem>.generate(
+  1000,
+  (index) => index % 6 == 0
+      ? HeadingItem('Heading $index')
+      : MessageItem('Sender $index', 'Messsage body $index'),
+);
 
 class TitleSection extends StatelessWidget {
   const TitleSection({super.key, required this.name, required this.location});
