@@ -13,17 +13,38 @@ class MyApp extends StatelessWidget {
       title: appTitle,
       home: Scaffold(
         appBar: AppBar(title: const Text(appTitle)),
-        body: ListView.builder(
-          itemCount: items.length,
-          itemBuilder: (context, index) {
-            final item = items[index];
-            return ListTile(
-              title: item.buildTitle(context),
-              subtitle: item.buildSubtitle(context),
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    ItemWidget(text: 'Item 1'),
+                    ItemWidget(text: 'Item 2'),
+            
+                  ],
+                ),
+              ),
             );
           },
         ),
       ),
+    );
+  }
+}
+
+class ItemWidget extends StatelessWidget {
+  const ItemWidget({super.key, required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: SizedBox(height: 100, child: Center(child: Text(text))),
     );
   }
 }
