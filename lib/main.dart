@@ -1,34 +1,25 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+  final List<String> items = List<String>.generate(10000, (i) => 'Item $i');
   @override
   Widget build(BuildContext context) {
-    const String appTitle = 'TrungBN Demo App';
+    const title = 'Long List';
+
     return MaterialApp(
-      title: appTitle,
+      title: title,
       home: Scaffold(
-        appBar: AppBar(title: const Text(appTitle)),
-        body: LayoutBuilder(
-          builder: (context, constraints) {
-            return SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    ItemWidget(text: 'Item 1'),
-                    ItemWidget(text: 'Item 2'),
-            
-                  ],
-                ),
-              ),
-            );
+        appBar: AppBar(title: const Text(title)),
+        body: ListView.builder(
+          itemCount: items.length,
+          prototypeItem: ListTile(title: Text(items.first)),
+          itemBuilder: (context, index) {
+            return ListTile(title: Text(items[index]));
           },
         ),
       ),
