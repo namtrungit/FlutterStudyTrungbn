@@ -1,9 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 void main() {
   runApp(MyApp());
 }
 
+const Color darkBlue = Color.fromARGB(255, 18, 32, 47);
+class Location {
+  const Location({
+    required this.name,
+    required this.country,
+    required this.imageUrl,
+  });
+
+  final String name;
+  final String country;
+  final String imageUrl;
+}
+const urlPrefix =
+    'https://docs.flutter.dev/cookbook/img-files/effects/parallax';
+const locations = [
+  Location(
+    name: 'Mount Rushmore',
+    country: 'U.S.A',
+    imageUrl: '$urlPrefix/01-mount-rushmore.jpg',
+  ),
+  Location(
+    name: 'Gardens By The Bay',
+    country: 'Singapore',
+    imageUrl: '$urlPrefix/02-singapore.jpg',
+  ),
+  Location(
+    name: 'Machu Picchu',
+    country: 'Peru',
+    imageUrl: '$urlPrefix/03-machu-picchu.jpg',
+  ),
+  Location(
+    name: 'Vitznau',
+    country: 'Switzerland',
+    imageUrl: '$urlPrefix/04-vitznau.jpg',
+  ),
+  Location(
+    name: 'Bali',
+    country: 'Indonesia',
+    imageUrl: '$urlPrefix/05-bali.jpg',
+  ),
+  Location(
+    name: 'Mexico City',
+    country: 'Mexico',
+    imageUrl: '$urlPrefix/06-mexico-city.jpg',
+  ),
+  Location(name: 'Cairo', country: 'Egypt', imageUrl: '$urlPrefix/07-cairo.jpg'),
+];
 class MyApp extends StatelessWidget {
   MyApp({super.key});
   final List<String> items = List<String>.generate(100, (i) => 'Item $i');
@@ -12,27 +60,112 @@ class MyApp extends StatelessWidget {
     const title = 'Floating App Bar';
 
     return MaterialApp(
+      theme: ThemeData.dark().copyWith(scaffoldBackgroundColor: darkBlue),
       title: title,
       home: Scaffold(
-        appBar: AppBar(title: const Text(title)),
-        body: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              title: Text('TrungBN Demo Float list'),
-              pinned: true,
-              flexibleSpace: FlexibleSpaceBar(
-                title: Text('List'),
-                background: Image.asset('images/lake.jpg', fit: BoxFit.cover),
-              ),
-              expandedHeight: 200,
+        body: Center(child: ParallaxRecipe(locations: locations)),
+      ),
+    );
+  }
+}
+
+
+
+class ParallaxRecipe extends StatelessWidget {
+  const ParallaxRecipe({super.key, required this.locations});
+
+  final List<Location> locations;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          for (final location in locations)
+            LocationListItem(
+              imageUrl: location.imageUrl,
+              name: location.name,
+              country: location.country,
             ),
-            SliverList.builder(
-              itemBuilder: (context, index) =>
-                  ListTile(title: Text('Item #$index')),
-                  itemCount: 50,
-            ),
-          ],
+        ],
+      ),
+    );
+  }
+}
+
+@immutable
+class LocationListItem extends StatelessWidget {
+  const LocationListItem({
+    super.key,
+    required this.imageUrl,
+    required this.name,
+    required this.country,
+  });
+
+  final String imageUrl;
+  final String name;
+  final String country;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      child: AspectRatio(
+        aspectRatio: 16 / 9,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: Stack(
+            children: [
+              _buildParallaxBackground(context),
+              _buildGradient(),
+              _buildTitleAndSubtitle(),
+            ],
+          ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildParallaxBackground(BuildContext context) {
+    return Positioned.fill(child: Image.network(imageUrl, fit: BoxFit.cover));
+  }
+
+  Widget _buildGradient() {
+    return Positioned.fill(
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.transparent, Colors.black.withValues(alpha: 0.7)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            stops: const [0.6, 0.95],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTitleAndSubtitle() {
+    return Positioned(
+      bottom: 20,
+      left: 20,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            name,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            country,
+            style: const TextStyle(color: Colors.white, fontSize: 14),
+          ),
+        ],
       ),
     );
   }
