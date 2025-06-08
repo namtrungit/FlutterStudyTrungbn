@@ -6,21 +6,32 @@ void main() {
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
-  final List<String> items = List<String>.generate(10000, (i) => 'Item $i');
+  final List<String> items = List<String>.generate(100, (i) => 'Item $i');
   @override
   Widget build(BuildContext context) {
-    const title = 'Long List';
+    const title = 'Floating App Bar';
 
     return MaterialApp(
       title: title,
       home: Scaffold(
         appBar: AppBar(title: const Text(title)),
-        body: ListView.builder(
-          itemCount: items.length,
-          prototypeItem: ListTile(title: Text(items.first)),
-          itemBuilder: (context, index) {
-            return ListTile(title: Text(items[index]));
-          },
+        body: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              title: Text('TrungBN Demo Float list'),
+              pinned: true,
+              flexibleSpace: FlexibleSpaceBar(
+                title: Text('List'),
+                background: Image.asset('images/lake.jpg', fit: BoxFit.cover),
+              ),
+              expandedHeight: 200,
+            ),
+            SliverList.builder(
+              itemBuilder: (context, index) =>
+                  ListTile(title: Text('Item #$index')),
+                  itemCount: 50,
+            ),
+          ],
         ),
       ),
     );
