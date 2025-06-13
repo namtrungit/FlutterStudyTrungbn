@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'widgets/swip_to_dismiss.dart';
+import 'widgets/my_custom_form.dart';
 
 void main() {
-  runApp(const MaterialApp(home: SwipToDismiss()));
+  runApp(const MaterialApp(home: MyCustomForm()));
 }
