@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'widgets/image.dart';
+import 'widgets/video_example.dart';
 
 void main() {
-  runApp(const MaterialApp(home: ImageDemo()));
+  runApp(const MaterialApp(home: VideoExample()));
 }
