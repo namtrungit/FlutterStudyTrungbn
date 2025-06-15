@@ -8,14 +8,22 @@ class MyCustomForm extends StatefulWidget {
 }
 
 class _MyCustomFormState extends State<MyCustomForm> {
-  final userController = TextEditingController();
-  final passwordController = TextEditingController();
+  final userController = TextEditingController(text: 'Hello');
+  final passwordController = TextEditingController(text: '123456');
   bool obscureText = true;
+  late FocusNode myFocusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    myFocusNode = FocusNode();
+  }
 
   @override
   void dispose() {
     userController.dispose();
     passwordController.dispose();
+    myFocusNode.dispose();
     super.dispose();
   }
 
@@ -34,8 +42,10 @@ class _MyCustomFormState extends State<MyCustomForm> {
                 hintText: 'Please Enter Your User Name',
                 border: OutlineInputBorder(),
               ),
+              focusNode: myFocusNode,
             ),
             TextField(
+              autofocus: true,
               controller: passwordController,
               obscureText: obscureText,
               decoration: InputDecoration(
@@ -58,6 +68,7 @@ class _MyCustomFormState extends State<MyCustomForm> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          myFocusNode.requestFocus();
           showDialog(
             context: context,
             builder: (context) {
