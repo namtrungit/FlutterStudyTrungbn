@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'widgets/video_example.dart';
+import 'widgets/tabs_example.dart';
 
 void main() {
-  runApp(const MaterialApp(home: VideoExample()));
+  runApp(const MaterialApp(home: TabsExample()));
 }
