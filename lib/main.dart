@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'widgets/tabs_example.dart';
+import 'widgets/navigation_example.dart';
 
 void main() {
-  runApp(const MaterialApp(home: TabsExample()));
+  runApp(const MaterialApp(home: NavigationExample()));
 }
